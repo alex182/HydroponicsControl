@@ -1,0 +1,6 @@
+C:\Users\alexb\source\repos\HydroponicsControl\GPIOManager\bin\Debug\netstandard2.0\GPIOManager.deps.json
+C:\Users\alexb\source\repos\HydroponicsControl\GPIOManager\bin\Debug\netstandard2.0\GPIOManager.dll
+C:\Users\alexb\source\repos\HydroponicsControl\GPIOManager\obj\Debug\netstandard2.0\GPIOManager.csprojAssemblyReference.cache
+C:\Users\alexb\source\repos\HydroponicsControl\GPIOManager\obj\Debug\netstandard2.0\GPIOManager.csproj.CoreCompileInputs.cache
+C:\Users\alexb\source\repos\HydroponicsControl\GPIOManager\obj\Debug\netstandard2.0\GPIOManager.AssemblyInfoInputs.cache
+C:\Users\alexb\source\repos\HydroponicsControl\GPIOManager\obj\Debug\netstandard2.0\GPIOManager.AssemblyInfo.cs
