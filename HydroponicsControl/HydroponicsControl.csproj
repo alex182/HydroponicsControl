@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
+    <Configurations>Debug;Release;Deploy-To-Pi;Publish-To-Pi-Debug</Configurations>
   </PropertyGroup>
 
   <ItemGroup>
@@ -429,7 +430,10 @@
 
 
   <ItemGroup>
+    <PackageReference Include="FluentValidation.AspNetCore" Version="8.4.0" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.RazorPages" Version="2.2.5" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="3.1.4" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer" Version="3.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
@@ -442,5 +446,15 @@
   <ItemGroup>
     <ProjectReference Include="..\RelayClient\RelayClient.csproj" />
   </ItemGroup>
+
+
+  <ItemGroup>
+    <Folder Include="Controllers\Sensors\" />
+  </ItemGroup>
+
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="if $(ConfigurationName) == Publish-To-Pi-Debug (&#xD;&#xA;     dotnet restore -r linux-arm&#xD;&#xA;     dotnet publish  . -r linux-arm --no-build --self-contained&#xD;&#xA;     pscp -pw raspberry -v -r .\bin\Debug\netcoreapp2.2\linux-arm\publish\* pi@hydropi:/home/pi/hydropi&#xD;&#xA;     plink.exe -ssh pi@hydropi -pw raspberry &quot;chmod +x /home/pi/hydropi/HydroponicsControl&quot;&#xD;&#xA;)" />
+  </Target>
 
 </Project>

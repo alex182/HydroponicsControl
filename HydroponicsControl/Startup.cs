@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using System.Device.Gpio;
 using System.Linq;
 using System.Threading.Tasks;
+using FluentValidation;
+using FluentValidation.AspNetCore;
+using HydroponicsControl.Controllers.Relay.Version1.Processors.Request;
+using HydroponicsControl.Controllers.Relay.Version1.Validators;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -43,18 +47,19 @@ namespace HydroponicsControl
 
 
             //TODO: use a real logger eventually
-            var loggerFactory = new LoggerFactory()
-              .AddConsole()
-              .AddDebug();
+            var loggerFactory = new LoggerFactory();
 
-            ILogger logger = loggerFactory.CreateLogger<Program>();
-
-            services.AddTransient<ILogger>(provider => logger);
+            services.AddTransient<IValidator<GetRelayStateProcessorRequestVersionOne>, GetRelayStateRequestValidator>();
+            services.AddTransient(provider => loggerFactory);
             services.AddSingleton<IGpioController, GpioController>();
             services.AddSingleton<IRelayClientOptions>(provider => relayOptions); 
-            services.AddSingleton<IRelayClient,RelayClient.RelayClient>(); 
+            services.AddSingleton<IRelayClient,RelayClient.RelayClient>();
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc()
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
+                .AddFluentValidation();
+
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1",new Swashbuckle.AspNetCore.Swagger.Info { Title ="HydroPi", Version ="V1"});

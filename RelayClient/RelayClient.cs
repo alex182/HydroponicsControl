@@ -14,11 +14,11 @@ namespace RelayClient
         private readonly IGpioController _gpioController;
         private readonly List<Relay> _relays;
 
-        public RelayClient(ILogger logger, 
+        public RelayClient(ILoggerFactory loggerFactory, 
             IGpioController gpioController,
             IRelayClientOptions relayClientOptions)
         {
-            _logger = logger;
+            _logger = loggerFactory.CreateLogger<RelayClient>();
             _gpioController = gpioController;
             _relays = relayClientOptions.Relays;
         }
