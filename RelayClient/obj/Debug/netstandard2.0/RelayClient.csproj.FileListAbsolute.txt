@@ -1,7 +1,6 @@
 C:\Users\alexb\source\repos\HydroponicsControl\RelayClient\bin\Debug\netstandard2.0\RelayClient.deps.json
 C:\Users\alexb\source\repos\HydroponicsControl\RelayClient\bin\Debug\netstandard2.0\RelayClient.dll
 C:\Users\alexb\source\repos\HydroponicsControl\RelayClient\bin\Debug\netstandard2.0\RelayClient.pdb
-C:\Users\alexb\source\repos\HydroponicsControl\RelayClient\obj\Debug\netstandard2.0\RelayClient.csprojAssemblyReference.cache
 C:\Users\alexb\source\repos\HydroponicsControl\RelayClient\obj\Debug\netstandard2.0\RelayClient.csproj.CoreCompileInputs.cache
 C:\Users\alexb\source\repos\HydroponicsControl\RelayClient\obj\Debug\netstandard2.0\RelayClient.AssemblyInfoInputs.cache
 C:\Users\alexb\source\repos\HydroponicsControl\RelayClient\obj\Debug\netstandard2.0\RelayClient.AssemblyInfo.cs
