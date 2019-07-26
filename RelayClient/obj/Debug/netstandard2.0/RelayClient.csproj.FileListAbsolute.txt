@@ -9,3 +9,4 @@ C:\Users\alexb\source\repos\HydroponicsControl\RelayClient\obj\Debug\netstandard
 C:\Users\alexb\source\repos\HydroponicsControl\RelayClient\bin\Debug\netstandard2.0\Microsoft.Extensions.Logging.Abstractions.dll
 C:\Users\alexb\source\repos\HydroponicsControl\RelayClient\bin\Debug\netstandard2.0\Microsoft.Extensions.Logging.Abstractions.xml
 C:\Users\alexb\source\repos\HydroponicsControl\RelayClient\obj\Debug\netstandard2.0\RelayClient.csproj.CopyComplete
+C:\Users\alexb\source\repos\HydroponicsControl\RelayClient\obj\Debug\netstandard2.0\RelayClient.csprojAssemblyReference.cache

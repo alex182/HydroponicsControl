@@ -17,17 +17,14 @@ namespace HydroponicsControl.Controllers.Relay.Version1.Processors
     {
         private readonly ILogger _logger;
         private readonly IRelayClient _relayClient;
-        private readonly IValidator _validator; 
 
         public GetRelayStateProcessorVersionOne(
             GetRelayStateProcessorRequestVersionOne record, 
             ILoggerFactory loggerFactory,
-            IRelayClient relayClient,
-            IValidator validator) : base(record, loggerFactory)
+            IRelayClient relayClient) : base(record, loggerFactory)
         {
             _logger = loggerFactory.CreateLogger<GetRelayStateProcessorVersionOne>();
             _relayClient = relayClient;
-            _validator = validator;
         }
 
         public override ValidationResult IsValid(GetRelayStateProcessorRequestVersionOne record)

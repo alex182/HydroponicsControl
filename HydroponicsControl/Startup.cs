@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using HydroponicsControl.Controllers.Common.Processor;
 using HydroponicsControl.Controllers.Relay.Version1.Processors.Request;
 using HydroponicsControl.Controllers.Relay.Version1.Validators;
 using Microsoft.AspNetCore.Builder;
@@ -31,6 +32,7 @@ namespace HydroponicsControl
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var devMachineName = Configuration.GetValue<string>("DevMachineName");
             services.Configure<CookiePolicyOptions>(options =>
             {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
@@ -45,15 +47,25 @@ namespace HydroponicsControl
                 Relays = relays
             };
 
-
+            
             //TODO: use a real logger eventually
             var loggerFactory = new LoggerFactory();
 
             services.AddTransient<IValidator<GetRelayStateProcessorRequestVersionOne>, GetRelayStateRequestValidator>();
             services.AddTransient(provider => loggerFactory);
-            services.AddSingleton<IGpioController, GpioController>();
-            services.AddSingleton<IRelayClientOptions>(provider => relayOptions); 
-            services.AddSingleton<IRelayClient,RelayClient.RelayClient>();
+
+            if(Environment.MachineName == devMachineName)
+            {
+                services.AddSingleton<IGpioController, MockGpioDriver>();
+            }
+            else
+            {
+                services.AddSingleton<IGpioController, GpioController>();
+            }
+
+            services.AddSingleton<IRelayClientOptions>(provider => relayOptions);
+            services.AddSingleton<IRelayClient, RelayClient.RelayClient>();
+            services.AddTransient<IProcessorFactory,ProcessorFactory>();
 
             services.AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)

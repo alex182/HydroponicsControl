@@ -14,22 +14,19 @@ namespace HydroponicsControl.Controllers.Common.Processor
     {
         private readonly ILoggerFactory _loggerFactory;
         private readonly IRelayClient _relayClient;
-        private readonly IValidator _validator;
 
         public ProcessorFactory(ILoggerFactory loggerFactory,
-            IRelayClient relayClient,
-            IValidator validator)
+            IRelayClient relayClient)
         {
             _loggerFactory = loggerFactory;
             _relayClient = relayClient;
-            _validator = validator;
         }
 
         public IProcessor Create(IProcessorRequest request)
         {
             if (request is GetRelayStateProcessorRequestVersionOne)
                 return new GetRelayStateProcessorVersionOne((GetRelayStateProcessorRequestVersionOne)request,
-                    _loggerFactory,_relayClient,_validator);
+                    _loggerFactory,_relayClient);
 
             return null;
         }
