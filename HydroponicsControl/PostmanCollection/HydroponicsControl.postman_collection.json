@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "e86aeba5-af4a-454c-8659-61dcc5d3f216",
+		"_postman_id": "253dc3df-8b9c-4bb7-a801-38595ae0d8e7",
 		"name": "HydroponicsControl",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -17,7 +17,7 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{url}}api/relay/state?Pin=11&GpioPin=11&RelayName=asdf",
+									"raw": "{{url}}api/relay/state?Pin=1&GpioPin=11&RelayName=asdf",
 									"host": [
 										"{{url}}api"
 									],
@@ -28,7 +28,7 @@
 									"query": [
 										{
 											"key": "Pin",
-											"value": "11"
+											"value": "1"
 										},
 										{
 											"key": "GpioPin",
@@ -38,6 +38,24 @@
 											"key": "RelayName",
 											"value": "asdf"
 										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GetRelays",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}api/relay/Pin=1&GpioPin=11&RelayName=asdf",
+									"host": [
+										"{{url}}api"
+									],
+									"path": [
+										"relay",
+										"Pin=1&GpioPin=11&RelayName=asdf"
 									]
 								}
 							},
