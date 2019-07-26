@@ -450,6 +450,7 @@
 
   <ItemGroup>
     <Folder Include="Controllers\Sensors\" />
+    <Folder Include="PostmanCollection\" />
   </ItemGroup>
 
 
