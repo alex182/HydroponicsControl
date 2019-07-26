@@ -30,7 +30,7 @@ namespace RelayClient
 
         public Relay IsValidRelay(int relay)
         {
-            return _relays.FirstOrDefault(r => r.RelayNumber == relay);
+            return _relays.FirstOrDefault(r => r.Pin == relay);
         }
 
         public RelayState? GetRelayState(int relay)
@@ -77,7 +77,7 @@ namespace RelayClient
 
         private int? GetRelayPin(int relay)
         {
-            return _relays.FirstOrDefault(r => r.RelayNumber == relay)?.Pin;
+            return _relays.FirstOrDefault(r => r.Pin == relay)?.Pin;
         }
     }
 }

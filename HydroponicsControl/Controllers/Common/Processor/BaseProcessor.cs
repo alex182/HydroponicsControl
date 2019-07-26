@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using FluentValidation.Results;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -56,6 +55,6 @@ namespace HydroponicsControl.Controllers.Common.Processor
 
         public abstract IActionResult ProcessRequest(T record);
 
-        public abstract ValidationResult IsValid(T record);
+        public abstract IValidationResult IsValid(T record);
     }
 }

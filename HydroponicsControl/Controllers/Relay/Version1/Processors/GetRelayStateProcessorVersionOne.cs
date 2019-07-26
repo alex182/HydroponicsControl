@@ -1,15 +1,10 @@
-﻿using FluentValidation;
-using FluentValidation.Results;
-using HydroponicsControl.Controllers.Common.Processor;
+﻿using HydroponicsControl.Controllers.Common.Processor;
 using HydroponicsControl.Controllers.Relay.Version1.Processors.Request;
-using HydroponicsControl.Controllers.Relay.Version1.Processors.Response;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using RelayClient;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace HydroponicsControl.Controllers.Relay.Version1.Processors
 {
@@ -27,9 +22,41 @@ namespace HydroponicsControl.Controllers.Relay.Version1.Processors
             _relayClient = relayClient;
         }
 
-        public override ValidationResult IsValid(GetRelayStateProcessorRequestVersionOne record)
+        public override IValidationResult IsValid(GetRelayStateProcessorRequestVersionOne record)
         {
-            throw new NotImplementedException();
+            var existingRelays = _relayClient.GetRelays();
+
+            if(record?.Pin == null && record?.GpioPin == null && string.IsNullOrWhiteSpace(record?.RelayName))
+            {
+                return new ValidationResult
+                {
+                    Message = $"At least one of the following must be included " +
+                    $"{nameof(record.Pin)}, {nameof(record.GpioPin)}, or {nameof(record.RelayName)}",
+
+                    StatusCode = System.Net.HttpStatusCode.BadRequest
+                };
+            }
+
+            if (existingRelays.FirstOrDefault(r => r.Pin == record?.Pin) != null)
+            {
+                return null; 
+            }
+
+            if (existingRelays.FirstOrDefault(r => r.GpioPin == record?.GpioPin) != null)
+            {
+                return null;
+            }
+
+            if (existingRelays.FirstOrDefault(r => r.RelayName.ToLower() == record.RelayName?.ToLower()) != null)
+            {
+                return null;
+            }
+
+            return new ValidationResult
+            {
+                Message = "Could not find a relay using the provided information",
+                StatusCode = System.Net.HttpStatusCode.NotFound
+            }; 
         }
 
         public override IActionResult ProcessRequest(GetRelayStateProcessorRequestVersionOne record)

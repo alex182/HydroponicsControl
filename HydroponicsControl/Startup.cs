@@ -15,8 +15,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using RelayClient;
 using RelayClient.Models;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration.Binder;
 
 namespace HydroponicsControl
 {
@@ -40,8 +43,7 @@ namespace HydroponicsControl
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            //TODO: get this off the raspi from an environmental variable
-            var relays = new List<Relay>();
+            var relays = Configuration.GetSection("Relays").Get<List<Relay>>();
             var relayOptions = new RelayClientOptions
             {
                 Relays = relays

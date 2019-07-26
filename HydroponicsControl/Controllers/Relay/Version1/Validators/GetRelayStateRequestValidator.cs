@@ -13,7 +13,7 @@ namespace HydroponicsControl.Controllers.Relay.Version1.Validators
         public GetRelayStateRequestValidator(IRelayClient relayClient)
         {
             //TODO: check to see if relay actually exists
-            RuleFor(x => x.RelayID).ExclusiveBetween(1, int.MaxValue);
+           // RuleFor(x => x.RelayID).ExclusiveBetween(1, int.MaxValue);
         }
     }
 }

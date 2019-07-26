@@ -30,9 +30,13 @@ namespace HydroponicsControl.Controllers.Relay.Version1
 
 
         [HttpGet("state")]
-        public IActionResult GetRelayState([FromQuery][Range(1,int.MaxValue)]int relayId)
+        public IActionResult GetRelayState([FromQuery]GetRelayStateRequest request)
         {
-            var processorRequest = new GetRelayStateProcessorRequestVersionOne();
+            var processorRequest = new GetRelayStateProcessorRequestVersionOne() {
+                Pin = request?.Pin,
+                GpioPin = request?.GpioPin, 
+                RelayName = request?.RelayName
+            };
             var processor = _processorFactory.Create(processorRequest);
 
             var result = processor.Execute();
