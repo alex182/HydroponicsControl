@@ -49,13 +49,13 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{url}}api/relay/Pin=1&GpioPin=11&RelayName=asdf",
+									"raw": "{{url}}api/relay/",
 									"host": [
 										"{{url}}api"
 									],
 									"path": [
 										"relay",
-										"Pin=1&GpioPin=11&RelayName=asdf"
+										""
 									]
 								}
 							},

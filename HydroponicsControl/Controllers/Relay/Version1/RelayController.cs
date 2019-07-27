@@ -47,7 +47,8 @@ namespace HydroponicsControl.Controllers.Relay.Version1
         [HttpGet()]
         public IActionResult GetRelays()
         {
-            throw new NotImplementedException();
+            var processor = _processorFactory.Create(new GetRelaysProcessorRequestVersionOne());
+            return processor.Execute(); 
         }
 
         [HttpPost("toggleState")]

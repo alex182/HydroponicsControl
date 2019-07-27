@@ -28,6 +28,11 @@ namespace HydroponicsControl.Controllers.Common.Processor
                 return new GetRelayStateProcessorVersionOne((GetRelayStateProcessorRequestVersionOne)request,
                     _loggerFactory,_relayClient);
 
+            if (request is GetRelaysProcessorRequestVersionOne)
+                return new GetRelaysProcessorVersionOne((GetRelaysProcessorRequestVersionOne)request,
+                    _loggerFactory, _relayClient);
+
+
             return null;
         }
     }
