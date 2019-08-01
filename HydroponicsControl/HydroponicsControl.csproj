@@ -3,14 +3,19 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
+    <RuntimeFrameworkVersion>2.2.0</RuntimeFrameworkVersion>
     <Configurations>Debug;Release;Deploy-To-Pi;Publish-To-Pi-Debug</Configurations>
   </PropertyGroup>
 
   <ItemGroup>
     <Compile Remove="bin\**" />
+    <Compile Remove="wwwroot\**" />
     <Content Remove="bin\**" />
+    <Content Remove="wwwroot\**" />
     <EmbeddedResource Remove="bin\**" />
+    <EmbeddedResource Remove="wwwroot\**" />
     <None Remove="bin\**" />
+    <None Remove="wwwroot\**" />
   </ItemGroup>
 
 
@@ -34,8 +39,20 @@
 
 
   <ItemGroup>
-    <Folder Include="Controllers\Sensors\" />
+    <Folder Include="Pages\Controllers\Sensors\" />
     <Folder Include="PostmanCollection\" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <None Include="Pages\Error.cshtml" />
+    <None Include="Pages\Index.cshtml" />
+    <None Include="Pages\Privacy.cshtml" />
+    <None Include="Pages\Shared\_CookieConsentPartial.cshtml" />
+    <None Include="Pages\Shared\_Layout.cshtml" />
+    <None Include="Pages\Shared\_ValidationScriptsPartial.cshtml" />
+    <None Include="Pages\_ViewImports.cshtml" />
+    <None Include="Pages\_ViewStart.cshtml" />
   </ItemGroup>
 
 

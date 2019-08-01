@@ -49,11 +49,12 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{url}}api/relay/",
+									"raw": "{{url}}/api/relay/",
 									"host": [
-										"{{url}}api"
+										"{{url}}"
 									],
 									"path": [
+										"api",
 										"relay",
 										""
 									]

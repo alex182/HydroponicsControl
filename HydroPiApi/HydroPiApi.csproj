@@ -1,0 +1,38 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
+    <RuntimeFrameworkVersion>2.2.0</RuntimeFrameworkVersion>
+    <TargetLatestRuntimePatch>true</TargetLatestRuntimePatch>
+    <Configurations>Debug;Release;Publish-To-Pi-Debug</Configurations>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="obj\**" />
+    <Content Remove="obj\**" />
+    <EmbeddedResource Remove="obj\**" />
+    <None Remove="obj\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="3.1.4" />
+    <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="4.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\RelayClient\RelayClient.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Controllers\Relay\Version1\Validators\" />
+    <Folder Include="Controllers\Sensors\" />
+  </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="if $(ConfigurationName) == Publish-To-Pi-Debug (&#xD;&#xA;     dotnet restore -r linux-arm&#xD;&#xA;     dotnet publish  . -r linux-arm --self-contained&#xD;&#xA;     pscp -pw raspberry -v -r .\bin\Debug\netcoreapp2.2\linux-arm\* pi@hydropi:/home/pi/hydropi/hydropiapi&#xD;&#xA;     plink.exe -ssh pi@hydropi -pw raspberry &quot;chmod +x /home/pi/hydropi/hydropiapi/publish/HydroPiApi&quot;&#xD;&#xA;)" />
+  </Target>
+
+</Project>
