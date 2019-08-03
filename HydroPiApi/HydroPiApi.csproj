@@ -29,6 +29,7 @@
   <ItemGroup>
     <Folder Include="Controllers\Relay\Version1\Validators\" />
     <Folder Include="Controllers\Sensors\" />
+    <Folder Include="Postman Collection\" />
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">

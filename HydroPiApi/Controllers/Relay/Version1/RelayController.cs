@@ -61,5 +61,11 @@ namespace HydroPiApi.Controllers.Relay.Version1
 
             return result;
         }
+
+        [HttpPost("scheduleToggle")]
+        public IActionResult ScheduleToggle([FromBody] ScheduledToggleRequest request)
+        {
+            throw new NotImplementedException(); 
+        }
     }
 }

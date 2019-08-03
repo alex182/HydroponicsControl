@@ -46,7 +46,6 @@ namespace RelayClient
             if (!IsPinOpen)
                 _gpioController.OpenPin(gpioPin);
 
-            //_gpioController.SetPinMode(gpioPin, PinMode.Input);
             var pinState = _gpioController.GetPinMode(gpioPin);
 
             return pinState == PinMode.Output ? RelayState.On : RelayState.Off;
