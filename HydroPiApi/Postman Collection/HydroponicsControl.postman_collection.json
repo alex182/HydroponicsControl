@@ -61,6 +61,47 @@
 								}
 							},
 							"response": []
+						},
+						{
+							"name": "ToggleRelayState",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/x-www-form-urlencoded",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "GpioPin",
+											"value": "4",
+											"type": "text"
+										},
+										{
+											"key": "State",
+											"value": "1",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{url}}/api/relay/toggleState",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api",
+										"relay",
+										"toggleState"
+									]
+								}
+							},
+							"response": []
 						}
 					],
 					"_postman_isSubFolder": true

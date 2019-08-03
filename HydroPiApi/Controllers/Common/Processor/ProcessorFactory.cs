@@ -31,6 +31,9 @@ namespace HydroPiApi.Controllers.Common.Processor
                 return new GetRelaysProcessorVersionOne((GetRelaysProcessorRequestVersionOne)request,
                     _loggerFactory, _relayClient);
 
+            if (request is ToggleRelayStateProcessorRequestVersionOne)
+                return new ToggleRelayStateProcessorVersionOne((ToggleRelayStateProcessorRequestVersionOne)request,
+                    _loggerFactory, _relayClient);
 
             return null;
         }

@@ -2,7 +2,7 @@
 {
     public class ToggleRelayStateRequest
     {
-        public int Relay { get; set; }
+        public int GpioPin { get; set; }
         public RelayState State { get; set; }
     }
 }

@@ -5,25 +5,27 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using RelayClient;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace HydroPiApi.Controllers.Relay.Version1.Processors
 {
-    public class GetRelayStateProcessorVersionOne : BaseProcessor<GetRelayStateProcessorRequestVersionOne>
+    public class ToggleRelayStateProcessorVersionOne : BaseProcessor<ToggleRelayStateProcessorRequestVersionOne>
     {
         private readonly ILogger _logger;
         private readonly IRelayClient _relayClient;
 
-        public GetRelayStateProcessorVersionOne(
-            GetRelayStateProcessorRequestVersionOne record, 
+        public ToggleRelayStateProcessorVersionOne(
+            ToggleRelayStateProcessorRequestVersionOne record, 
             ILoggerFactory loggerFactory,
             IRelayClient relayClient) : base(record, loggerFactory)
         {
-            _logger = loggerFactory.CreateLogger<GetRelayStateProcessorVersionOne>();
+            _logger = loggerFactory.CreateLogger<ToggleRelayStateProcessorVersionOne>();
             _relayClient = relayClient;
         }
 
-        public override IValidationResult IsValid(GetRelayStateProcessorRequestVersionOne record)
+        public override IValidationResult IsValid(ToggleRelayStateProcessorRequestVersionOne record)
         {
             var existingRelays = _relayClient.GetRelays();
 
@@ -36,19 +38,22 @@ namespace HydroPiApi.Controllers.Relay.Version1.Processors
             {
                 Message = $"Could not find a relay with the gpio pin: {record.GpioPin}",
                 StatusCode = System.Net.HttpStatusCode.NotFound
-            }; 
+            };
         }
 
-        public override IActionResult ProcessRequest(GetRelayStateProcessorRequestVersionOne record)
+        public override IActionResult ProcessRequest(ToggleRelayStateProcessorRequestVersionOne record)
         {
-            var relayState = _relayClient.GetRelayState(record.GpioPin);
+            var result = _relayClient.ToggleRelayState(new ToggleRelayStateRequest {
+                GpioPin = record.GpioPin,
+                State = record.RelayState
+            });
 
-            return new ObjectResult(new GetRelayStateProcessorResponseVersionOne
-            {
-                IsSuccess = true,
-                State = relayState.Value,
-                StatusCode = System.Net.HttpStatusCode.OK
-            });;
+            return new ObjectResult(new ToggleRelayStateProcessorResponseVersionOne {
+                State = result.State.Value,
+                GpioPin = result.GpioPin,
+                IsSuccess = result.IsSuccess,
+                Errors = new List<string> { result?.ErrorMessage }
+            });
         }
     }
 }

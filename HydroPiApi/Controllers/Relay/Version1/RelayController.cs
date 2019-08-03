@@ -16,15 +16,12 @@ namespace HydroPiApi.Controllers.Relay.Version1
     public class RelayController : Controller
     {
         private readonly ILogger _logger;
-        private readonly IRelayClient _relayClient;
         private readonly IProcessorFactory _processorFactory;
 
         public RelayController(ILoggerFactory loggerFactory, 
-            IRelayClient relayClient,
             IProcessorFactory processorFactory)
         {
             _logger = loggerFactory.CreateLogger<RelayController>();
-            _relayClient = relayClient;
             _processorFactory = processorFactory; 
         }
 
@@ -33,15 +30,13 @@ namespace HydroPiApi.Controllers.Relay.Version1
         public IActionResult GetRelayState([FromQuery]GetRelayStateRequest request)
         {
             var processorRequest = new GetRelayStateProcessorRequestVersionOne() {
-                Pin = request?.Pin,
-                GpioPin = request?.GpioPin, 
-                RelayName = request?.RelayName
+                GpioPin = request.GpioPin
             };
             var processor = _processorFactory.Create(processorRequest);
 
             var result = processor.Execute();
 
-            return new ObjectResult(result);
+            return result;
         }
 
         [HttpGet()]
@@ -54,7 +49,17 @@ namespace HydroPiApi.Controllers.Relay.Version1
         [HttpPost("toggleState")]
         public IActionResult ToggleRelayState([FromBody] ToggleRelayStateRequest request)
         {
-            throw new NotImplementedException();
+            var processorRequest = new ToggleRelayStateProcessorRequestVersionOne
+            {
+                GpioPin = request.GpioPin,
+                RelayState = request.RelayState
+            };
+
+            var processor = _processorFactory.Create(processorRequest);
+
+            var result = processor.Execute();
+
+            return result;
         }
     }
 }

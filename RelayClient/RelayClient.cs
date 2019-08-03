@@ -12,7 +12,7 @@ namespace RelayClient
         //TODO: use logger once a log destination is decided on 
         private readonly ILogger _logger;
         private readonly IGpioController _gpioController;
-        private readonly List<Relay> _relays;
+        private List<Relay> _relays;
 
         public RelayClient(ILoggerFactory loggerFactory, 
             IGpioController gpioController,
@@ -20,7 +20,18 @@ namespace RelayClient
         {
             _logger = loggerFactory.CreateLogger<RelayClient>();
             _gpioController = gpioController;
-            _relays = relayClientOptions.Relays;
+
+            SetRelays(relayClientOptions.Relays);
+        }
+
+        private void SetRelays(List<Relay> relays)
+        {
+            foreach(var relay in relays)
+            {
+                _gpioController.OpenPin(relay.GpioPin);
+            }
+
+            _relays = relays;
         }
 
         public List<Relay> GetRelays()
@@ -28,56 +39,36 @@ namespace RelayClient
             return _relays;
         }
 
-        public Relay IsValidRelay(int relay)
+        public RelayState? GetRelayState(int gpioPin)
         {
-            return _relays.FirstOrDefault(r => r.Pin == relay);
-        }
-
-        public RelayState? GetRelayState(int relay)
-        {
-            if (IsValidRelay(relay) == null)
-                return null;
-
-            var pin = GetRelayPin(relay).Value;
-            var IsPinOpen = _gpioController.IsPinOpen(pin);
+            var IsPinOpen = _gpioController.IsPinOpen(gpioPin);
 
             if (!IsPinOpen)
-                return RelayState.Off;
+                _gpioController.OpenPin(gpioPin);
 
-            var pinState = _gpioController.Read(pin);
+            //_gpioController.SetPinMode(gpioPin, PinMode.Input);
+            var pinState = _gpioController.GetPinMode(gpioPin);
 
-            return pinState == PinValue.High ? RelayState.On : RelayState.Off;
+            return pinState == PinMode.Output ? RelayState.On : RelayState.Off;
         }
 
         public ToggleRelayStateResponse ToggleRelayState(ToggleRelayStateRequest request)
         {
-            var pinValue = request.State == RelayState.On ? PinValue.High: PinValue.Low;
             var response = new ToggleRelayStateResponse
             {
-                Relay = request.Relay,
-                State = null,
-                IsSuccess = false,
-                ErrorMessage = "Invalid relay"
+                GpioPin = request.GpioPin,
+                State =request.State
             };
 
-            var pin = GetRelayPin(request.Relay);
-            if(pin == null)
-            {
-                return response; 
-            }
+            var pinValue = request.State == RelayState.On ? PinValue.High: PinValue.Low;
 
-            _gpioController.OpenPin(pin.Value);
-            _gpioController.Write(pin.Value, pinValue);
-
-            response.ErrorMessage = "";
-            response.IsSuccess = true;
+            if(pinValue == PinValue.High)
+                _gpioController.SetPinMode(request.GpioPin, PinMode.Output);
+            else
+                _gpioController.SetPinMode(request.GpioPin, PinMode.Input);
 
             return response; 
         }
 
-        private int? GetRelayPin(int relay)
-        {
-            return _relays.FirstOrDefault(r => r.Pin == relay)?.Pin;
-        }
     }
 }

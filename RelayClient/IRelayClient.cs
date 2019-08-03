@@ -10,6 +10,5 @@ namespace RelayClient
         List<Relay> GetRelays();
         RelayState? GetRelayState(int relay);
         ToggleRelayStateResponse ToggleRelayState(ToggleRelayStateRequest request);
-        Relay IsValidRelay(int relay);
     }
 }
