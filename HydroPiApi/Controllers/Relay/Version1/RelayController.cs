@@ -65,7 +65,20 @@ namespace HydroPiApi.Controllers.Relay.Version1
         [HttpPost("scheduleToggle")]
         public IActionResult ScheduleToggle([FromBody] ScheduledToggleRequest request)
         {
-            throw new NotImplementedException(); 
+            var processorRequest = new ScheduledToggleProcessorRequestVersionOne
+            {
+                GpioPin = request.GpioPin,
+                Start = request.Start,
+                Stop = request?.Stop,
+                IntervalOn = request.IntervalOn,
+                IntervalOff = request.IntervalOff
+            };
+
+            var processor = _processorFactory.Create(processorRequest);
+
+            var result = processor.Execute();
+
+            return result;
         }
     }
 }
