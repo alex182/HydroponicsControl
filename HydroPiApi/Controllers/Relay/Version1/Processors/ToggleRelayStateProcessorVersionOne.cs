@@ -52,6 +52,7 @@ namespace HydroPiApi.Controllers.Relay.Version1.Processors
                 State = result.State.Value,
                 GpioPin = result.GpioPin,
                 IsSuccess = result.IsSuccess,
+                StatusCode = System.Net.HttpStatusCode.OK,
                 Errors = new List<string> { result?.ErrorMessage }
             });
         }
