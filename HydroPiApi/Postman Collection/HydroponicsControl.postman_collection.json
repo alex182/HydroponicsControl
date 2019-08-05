@@ -17,26 +17,19 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{url}}api/relay/state?Pin=1&GpioPin=11&RelayName=asdf",
+									"raw": "{{url}}/api/relay/state?GpioPin=4",
 									"host": [
-										"{{url}}api"
+										"{{url}}"
 									],
 									"path": [
+										"api",
 										"relay",
 										"state"
 									],
 									"query": [
 										{
-											"key": "Pin",
-											"value": "1"
-										},
-										{
 											"key": "GpioPin",
-											"value": "11"
-										},
-										{
-											"key": "RelayName",
-											"value": "asdf"
+											"value": "4"
 										}
 									]
 								}
@@ -49,14 +42,13 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{url}}/api/relay/",
+									"raw": "{{url}}/api/relay",
 									"host": [
 										"{{url}}"
 									],
 									"path": [
 										"api",
-										"relay",
-										""
+										"relay"
 									]
 								}
 							},
@@ -70,24 +62,13 @@
 									{
 										"key": "Content-Type",
 										"name": "Content-Type",
-										"value": "application/x-www-form-urlencoded",
+										"value": "application/json",
 										"type": "text"
 									}
 								],
 								"body": {
-									"mode": "urlencoded",
-									"urlencoded": [
-										{
-											"key": "GpioPin",
-											"value": "4",
-											"type": "text"
-										},
-										{
-											"key": "State",
-											"value": "1",
-											"type": "text"
-										}
-									]
+									"mode": "raw",
+									"raw": "{\n\t\"GpioPin\":27,\n\t\"RelayState\":1\n}"
 								},
 								"url": {
 									"raw": "{{url}}/api/relay/toggleState",
@@ -120,7 +101,39 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": ""
+									"raw": "{{url}}/api/sensor",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api",
+										"sensor"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GetSensorReading",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/api/sensor/reading?GpioPin=23",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api",
+										"sensor",
+										"reading"
+									],
+									"query": [
+										{
+											"key": "GpioPin",
+											"value": "23"
+										}
+									]
 								}
 							},
 							"response": []
