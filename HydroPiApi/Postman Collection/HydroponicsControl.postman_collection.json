@@ -110,7 +110,47 @@
 		},
 		{
 			"name": "Sensors",
-			"item": []
+			"item": [
+				{
+					"name": "Version 1",
+					"item": [
+						{
+							"name": "GetSensors",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": ""
+								}
+							},
+							"response": []
+						}
+					],
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "4006731e-aae2-4dde-92b1-56424b83ccc5",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "f71b9b96-cf03-4d58-90be-1c2b94f7d005",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					],
+					"_postman_isSubFolder": true
+				}
+			]
 		}
 	]
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Device.Gpio;
 using System.Linq;
 using System.Threading.Tasks;
+using HydroPiApi.Controllers.Common;
 using HydroPiApi.Controllers.Common.Processor;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -13,6 +14,9 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using RelayClient;
 using RelayClient.Models;
+using SensorClient;
+using SensorClient.Models;
+using SensorClient.SensorReadings;
 
 namespace HydroPiApi
 {
@@ -36,6 +40,12 @@ namespace HydroPiApi
                 Relays = relays
             };
 
+            var sensors = Configuration.GetSection("Sensors").Get<List<Sensor>>();
+            var sensorOptions = new SensorClientOptions
+            {
+                Sensors = sensors
+            };
+
             //TODO: use a real logger eventually
             var loggerFactory = new LoggerFactory();
 
@@ -51,7 +61,11 @@ namespace HydroPiApi
             }
 
             services.AddSingleton<IRelayClientOptions>(provider => relayOptions);
+            services.AddSingleton<ISensorClientOptions>(provider => sensorOptions);
+            services.AddTransient<ISensorReadingClientFactory, SensorReadingClientFactory>(); 
             services.AddSingleton<IRelayClient, RelayClient.RelayClient>();
+            services.AddSingleton<ISensorClient, SensorClient.SensorClient>();
+
             services.AddTransient<IProcessorFactory, ProcessorFactory>();
 
             services.AddMvc()

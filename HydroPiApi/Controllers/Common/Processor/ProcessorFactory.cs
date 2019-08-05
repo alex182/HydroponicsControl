@@ -1,7 +1,10 @@
 ﻿using HydroPiApi.Controllers.Relay.Version1.Processors;
 using HydroPiApi.Controllers.Relay.Version1.Processors.Request;
+using HydroPiApi.Controllers.Sensors.Version1.Processors;
+using HydroPiApi.Controllers.Sensors.Version1.Processors.Request;
 using Microsoft.Extensions.Logging;
 using RelayClient;
+using SensorClient;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,12 +16,15 @@ namespace HydroPiApi.Controllers.Common.Processor
     {
         private readonly ILoggerFactory _loggerFactory;
         private readonly IRelayClient _relayClient;
+        private readonly ISensorClient _sensorClient;
 
         public ProcessorFactory(ILoggerFactory loggerFactory,
-            IRelayClient relayClient)
+            IRelayClient relayClient,
+            ISensorClient sensorClient)
         {
             _loggerFactory = loggerFactory;
             _relayClient = relayClient;
+            _sensorClient = sensorClient;
         }
 
         public IProcessor Create(IProcessorRequest request)
@@ -35,6 +41,10 @@ namespace HydroPiApi.Controllers.Common.Processor
             if (request is ToggleRelayStateProcessorRequestVersionOne)
                 return new ToggleRelayStateProcessorVersionOne((ToggleRelayStateProcessorRequestVersionOne)request,
                     _loggerFactory, _relayClient);
+
+            if(request is GetSensorsProcessorRequestVersionOne)
+                return new GetSensorsProcessorVersionOne((GetSensorsProcessorRequestVersionOne)request,
+                    _loggerFactory, _sensorClient);
 
             return null;
         }

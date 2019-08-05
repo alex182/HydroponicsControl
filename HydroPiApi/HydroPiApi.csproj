@@ -26,11 +26,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\RelayClient\RelayClient.csproj" />
+    <ProjectReference Include="..\SensorClient\SensorClient.csproj" />
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Controllers\Sensors\Version1\Models\" />
     <Folder Include="Controllers\Tasks\" />
-    <Folder Include="Controllers\Sensors\" />
     <Folder Include="Postman Collection\" />
   </ItemGroup>
 
