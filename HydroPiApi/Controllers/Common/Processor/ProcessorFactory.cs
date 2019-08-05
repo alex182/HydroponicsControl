@@ -46,6 +46,10 @@ namespace HydroPiApi.Controllers.Common.Processor
                 return new GetSensorsProcessorVersionOne((GetSensorsProcessorRequestVersionOne)request,
                     _loggerFactory, _sensorClient);
 
+            if (request is GetSensorReadingProcessorRequestVersionOne)
+                return new GetSensorReadingProcessorVersionOne((GetSensorReadingProcessorRequestVersionOne)request,
+                    _loggerFactory, _sensorClient);
+
             return null;
         }
     }

@@ -26,19 +26,8 @@ namespace SensorClient
             _gpioController = gpioController;
             _logger = loggerFactory.CreateLogger<SensorClient>();
             _sensorReadingClientFactory = sensorReadingClientFactory;
-
-            this.SetSensors(sensorClientOptions.Sensors);
-        }
-        
-        private void SetSensors(List<Sensor> sensors)
-        {
-            foreach(var sensor in sensors)
-            {
-                _gpioController.OpenPin(sensor.GpioPin);
-            }
-
-            _sensors = sensors;
-        }
+            _sensors = sensorClientOptions.Sensors;
+        }       
 
         public ISensorReading GetSensorReading(int gpioPin)
         {

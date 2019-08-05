@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -33,7 +34,19 @@ namespace HydroPiApi.Controllers.Sensors.Version1
             var processor = _processorFactory.Create(request);
 
             var result = processor.Execute();
+            return result; 
+        }
 
+        [HttpGet("reading")]
+        public IActionResult GetSensorReading([FromQuery][Required] int gpioPin)
+        {
+            var request = new GetSensorReadingProcessorRequestVersionOne()
+            {
+                GpioPin = gpioPin
+            };
+            var processor = _processorFactory.Create(request);
+
+            var result = processor.Execute();
             return result; 
         }
     }
