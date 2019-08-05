@@ -39,7 +39,6 @@ namespace HydroPiApi
             //TODO: use a real logger eventually
             var loggerFactory = new LoggerFactory();
 
-            //services.AddTransient<IValidator<GetRelayStateProcessorRequestVersionOne>, GetRelayStateRequestValidator>();
             services.AddTransient(provider => loggerFactory);
 
             if (Environment.MachineName == devMachineName)

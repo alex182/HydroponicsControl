@@ -36,11 +36,6 @@ namespace HydroPiApi.Controllers.Common.Processor
                 return new ToggleRelayStateProcessorVersionOne((ToggleRelayStateProcessorRequestVersionOne)request,
                     _loggerFactory, _relayClient);
 
-
-            if (request is ScheduledToggleProcessorRequestVersionOne)
-                return new ScheduledToggleProcessorVersionOne((ScheduledToggleProcessorRequestVersionOne)request,
-                    _loggerFactory);
-
             return null;
         }
     }
