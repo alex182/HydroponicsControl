@@ -1,10 +1,12 @@
-﻿using System;
+﻿using SensorClient.Models;
+using SensorClient.Models.SensorReadings;
 using System.Collections.Generic;
-using System.Text;
 
 namespace SensorClient
 {
-    interface ISensorClient
+    public interface ISensorClient
     {
+        List<Sensor> GetSensors();
+        ISensorReading GetSensorReading(int gpioPin);
     }
 }
