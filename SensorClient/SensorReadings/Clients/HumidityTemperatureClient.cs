@@ -18,7 +18,8 @@ namespace SensorClient.SensorReadings.Clients
         public ISensorReading ReadSensor()
         {
             var result = new HumidityTemperatureReading();
-            while (true)
+            var attempts = 0; 
+            while (attempts < 5)
             {
                 using (Dht11 dht = new Dht11(_gpioPin))
                 {
@@ -28,9 +29,11 @@ namespace SensorClient.SensorReadings.Clients
 
                 if(result.Temperature.Fahrenheit >= -40)
                 {
-                    return result; 
+                    break;
                 }
+                attempts++; 
             }
+            return result;
         }
     }
 }
