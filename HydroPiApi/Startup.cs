@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Device.Gpio;
 using System.Linq;
 using System.Threading.Tasks;
+using HydroPiApi.BackgroundJobs;
+using HydroPiApi.BackgroundJobs.Models;
 using HydroPiApi.Controllers.Common;
 using HydroPiApi.Controllers.Common.Processor;
 using Microsoft.AspNetCore.Builder;
@@ -10,6 +12,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using RelayClient;
 using RelayClient.Models;
@@ -46,9 +49,11 @@ namespace HydroPiApi
                 Sensors = sensors
             };
 
+            var humidifierJobOptions = Configuration.GetSection("HumidifierJobOptions")
+                .Get<HumidifierJobOptions>();
+
             //TODO: use a real logger eventually
             var loggerFactory = new LoggerFactory();
-            var sqlLiteConnection = Configuration.GetValue<string>("LocalSqlLite");
 
             services.AddTransient(provider => loggerFactory);
 
@@ -59,23 +64,26 @@ namespace HydroPiApi
             else
             {
                 services.AddSingleton<IGpioController, GpioController>();
-                sqlLiteConnection = Configuration.GetValue<string>("RemoteSqlLite");
             }
 
+            services.AddSingleton<IHumidifierJobOptions>(provider => humidifierJobOptions);
             services.AddSingleton<IRelayClientOptions>(provider => relayOptions);
             services.AddSingleton<ISensorClientOptions>(provider => sensorOptions);
             services.AddTransient<ISensorReadingClientFactory, SensorReadingClientFactory>(); 
             services.AddSingleton<IRelayClient, RelayClient.RelayClient>();
             services.AddSingleton<ISensorClient, SensorClient.SensorClient>();
-
+           
             services.AddTransient<IProcessorFactory, ProcessorFactory>();
+
+            services.AddSingleton<IHostedService, HumidifierJob>();
 
             services.AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app,
+            Microsoft.AspNetCore.Hosting.IHostingEnvironment env)
         {
             if (env.IsDevelopment())
             {
