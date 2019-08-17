@@ -11,12 +11,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using RelayClient;
 using RelayClient.Models;
 using SensorClient;
 using SensorClient.Models;
 using SensorClient.SensorReadings;
+
 
 namespace HydroPiApi
 {
@@ -48,6 +48,7 @@ namespace HydroPiApi
 
             //TODO: use a real logger eventually
             var loggerFactory = new LoggerFactory();
+            var sqlLiteConnection = Configuration.GetValue<string>("LocalSqlLite");
 
             services.AddTransient(provider => loggerFactory);
 
@@ -58,6 +59,7 @@ namespace HydroPiApi
             else
             {
                 services.AddSingleton<IGpioController, GpioController>();
+                sqlLiteConnection = Configuration.GetValue<string>("RemoteSqlLite");
             }
 
             services.AddSingleton<IRelayClientOptions>(provider => relayOptions);
@@ -79,6 +81,9 @@ namespace HydroPiApi
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            var devMachineName = Configuration.GetValue<string>("DevMachineName");
+         
 
             app.UseMvc();
         }
