@@ -18,21 +18,12 @@ namespace SensorClient.SensorReadings.Clients
         public ISensorReading ReadSensor()
         {
             var result = new HumidityTemperatureReading();
-            var attempts = 0; 
-            while (attempts < 5)
+            using (Dht22 dht = new Dht22(_gpioPin))
             {
-                using (Dht11 dht = new Dht11(_gpioPin))
-                {
-                    result.Temperature = dht.Temperature;
-                    result.Humidity = dht.Humidity;
-                }
-
-                if(result.Temperature.Fahrenheit >= -40)
-                {
-                    break;
-                }
-                attempts++; 
+                result.Temperature = dht.Temperature;
+                result.Humidity = dht.Humidity;
             }
+
             return result;
         }
     }

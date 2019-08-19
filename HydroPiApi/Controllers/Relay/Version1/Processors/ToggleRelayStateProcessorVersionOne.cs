@@ -51,7 +51,7 @@ namespace HydroPiApi.Controllers.Relay.Version1.Processors
             return new ObjectResult(new ToggleRelayStateProcessorResponseVersionOne {
                 State = result.State.Value,
                 GpioPin = result.GpioPin,
-                IsSuccess = result.IsSuccess,
+                IsSuccess = true,
                 StatusCode = System.Net.HttpStatusCode.OK,
                 Errors = new List<string> { result?.ErrorMessage }
             });
