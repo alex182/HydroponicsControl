@@ -38,21 +38,32 @@ namespace HydroPiApi.BackgroundJobs
             // This will cause the loop to stop if the service is stopped
             while (!stoppingToken.IsCancellationRequested)
             {
-                var humidityReading = (HumidityTemperatureReading)_sensorClient
-                    .GetSensorReading(_options.HumiditySensorGpio);
-
-                var relayRequest = new ToggleRelayStateRequest {
-                    GpioPin = _options.RelayGpio,
-                    State = RelayState.On
-                };
-
-                if (humidityReading.Humidity >= _options.TargetHumidity)
+                try
                 {
-                    relayRequest.State = RelayState.Off;
-                }
+                    var humidityReading = (HumidityTemperatureReading)_sensorClient
+                        .GetSensorReading(_options.HumiditySensorGpio);
 
-                _relayClient.ToggleRelayState(relayRequest);
-                await Task.Delay(TimeSpan.FromMinutes(_options.CheckInterval), stoppingToken);
+                    var relayRequest = new ToggleRelayStateRequest
+                    {
+                        GpioPin = _options.RelayGpio,
+                        State = RelayState.On
+                    };
+
+                    if (humidityReading.Humidity >= _options.TargetHumidity)
+                    {
+                        relayRequest.State = RelayState.Off;
+                    }
+
+                    _relayClient.ToggleRelayState(relayRequest);
+                }
+                catch(Exception ex)
+                {
+                    //need a logger eventually...
+                }
+                finally
+                {
+                    await Task.Delay(TimeSpan.FromMinutes(_options.CheckInterval), stoppingToken);
+                }
             }
         }
 
