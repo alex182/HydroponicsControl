@@ -17,11 +17,22 @@ namespace SensorClient.SensorReadings.Clients
 
         public ISensorReading ReadSensor()
         {
-            var result = new HumidityTemperatureReading();
+            var result = new HumidityTemperatureReading
+            {
+                Humidity = 0
+            };
+
             using (Dht22 dht = new Dht22(_gpioPin))
             {
-                result.Temperature = dht.Temperature;
-                result.Humidity = dht.Humidity;
+                //sometimes the sensor returns NaN's
+                while(result.Humidity == 0)
+                {
+                    result.Temperature = dht.Temperature;
+                    result.Humidity = dht.Humidity;
+
+                    if(result.Humidity == 0)
+                        System.Threading.Thread.Sleep(1000);
+                }
             }
 
             return result;
