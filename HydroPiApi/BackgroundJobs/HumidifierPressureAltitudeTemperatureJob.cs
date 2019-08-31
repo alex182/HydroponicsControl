@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using HydroPiApi.BackgroundJobs.Models;
 using Microsoft.Extensions.Logging;
@@ -22,6 +23,15 @@ namespace HydroPiApi.BackgroundJobs
         {
             _logger = loggerFactory.CreateLogger<HumidifierPressureAltitudeTemperatureJob>();
             _options = options; 
+        }
+
+        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+        {
+            while (!stoppingToken.IsCancellationRequested)
+            {
+                
+                await Task.Delay(TimeSpan.FromMinutes(_options.CheckInterval), stoppingToken);
+            }
         }
     }
 }
