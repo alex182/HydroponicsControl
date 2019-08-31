@@ -12,28 +12,23 @@ using System.Threading.Tasks;
 
 namespace HydroPiApi.BackgroundJobs
 {
-    public class HumidifierJob : IHostedService, IDisposable
+    public class HumidifierJob : BaseJob
     {
-        private readonly ISensorClient _sensorClient;
-        private readonly IRelayClient _relayClient;
         private readonly ILogger _logger;
-        private readonly CancellationTokenSource _stoppingCts = new CancellationTokenSource();
         private readonly IHumidifierJobOptions _options;
-        private Task _executingTask;
         
 
-        public HumidifierJob(IRelayClient relayClient, 
+        public HumidifierJob(
+            IRelayClient relayClient,
             ISensorClient sensorClient,
-            ILoggerFactory loggerFactory,
-            IHumidifierJobOptions options)
+            IHumidifierJobOptions options,
+            ILoggerFactory loggerFactory) : base(relayClient,sensorClient)
         {
-            _relayClient = relayClient;
-            _sensorClient = sensorClient;
-            _logger = loggerFactory.CreateLogger<HumidifierJob>();
             _options = options;
+            _logger = loggerFactory.CreateLogger<HumidifierJob>();
         }
 
-        protected async Task ExecuteAsync(CancellationToken stoppingToken)
+        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             // This will cause the loop to stop if the service is stopped
             while (!stoppingToken.IsCancellationRequested)
@@ -55,42 +50,5 @@ namespace HydroPiApi.BackgroundJobs
                 await Task.Delay(TimeSpan.FromMinutes(_options.CheckInterval), stoppingToken);
             }
         }
-
-        public Task StartAsync(CancellationToken cancellationToken)
-        {
-            _executingTask = ExecuteAsync(_stoppingCts.Token);
-
-            if (_executingTask.IsCompleted)
-            {
-                return _executingTask;
-            }
-
-            return Task.CompletedTask;
-        }
-
-        public async Task StopAsync(CancellationToken cancellationToken)
-        {
-            if (_executingTask == null)
-            {
-                return;
-            }
-
-            try
-            {
-                _stoppingCts.Cancel();
-            }
-            finally
-            {
-                await Task.WhenAny(_executingTask, Task.Delay(Timeout.Infinite,
-                    cancellationToken));
-            }
-        }
-
-        public void Dispose()
-        {
-            _stoppingCts.Cancel();
-        }
-
-
     }
 }
