@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace HydroPiApi.Controllers.Sensors.Version1.Processors.Response
 {
-    public class GetSensorReadingProcessorResponseVersionOne : IProcessorResponse
+    public class GetSensorReadingByGpioAndI2CProcessorResponseVersionOne : IProcessorResponse
     {
         public ISensorReading Reading { get; set; }
         public HttpStatusCode StatusCode { get; set; }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Iot.Device.DHTxx;
 using SensorClient.Models.SensorReadings;
+using SensorClient.SensorReadings.Clients.Models;
 
 namespace SensorClient.SensorReadings.Clients
 {
@@ -10,9 +11,9 @@ namespace SensorClient.SensorReadings.Clients
     {
         private readonly int _gpioPin; 
 
-        public HumidityTemperatureClient(int gpioPin)
+        public HumidityTemperatureClient(SensorReadingByGpioOptions options)
         {
-            _gpioPin = gpioPin;
+            _gpioPin = options.GpioPin;
         }
 
         public ISensorReading ReadSensor()

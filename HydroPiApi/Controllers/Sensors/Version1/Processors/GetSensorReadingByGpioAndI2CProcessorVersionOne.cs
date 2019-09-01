@@ -4,6 +4,7 @@ using HydroPiApi.Controllers.Sensors.Version1.Processors.Response;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using SensorClient;
+using SensorClient.SensorReadings.Clients.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,21 +12,21 @@ using System.Threading.Tasks;
 
 namespace HydroPiApi.Controllers.Sensors.Version1.Processors
 {
-    public class GetSensorReadingProcessorVersionOne : BaseProcessor<GetSensorReadingProcessorRequestVersionOne>
+    public class GetSensorReadingByGpioAndI2CProcessorVersionOne : BaseProcessor<GetSensorReadingByGpioAndI2CProcessorRequestVersionOne>
     {
         private readonly ILogger _logger;
         private readonly ISensorClient _sensorClient;
 
-        public GetSensorReadingProcessorVersionOne(
-            GetSensorReadingProcessorRequestVersionOne record,
+        public GetSensorReadingByGpioAndI2CProcessorVersionOne(
+            GetSensorReadingByGpioAndI2CProcessorRequestVersionOne record, 
             ILoggerFactory loggerFactory,
             ISensorClient sensorClient) : base(record, loggerFactory)
         {
-            _logger = loggerFactory.CreateLogger<GetSensorReadingProcessorVersionOne>();
             _sensorClient = sensorClient;
+            _logger = loggerFactory.CreateLogger<GetSensorReadingByGpioAndI2CProcessorVersionOne>();
         }
 
-        public override IValidationResult IsValid(GetSensorReadingProcessorRequestVersionOne record)
+        public override IValidationResult IsValid(GetSensorReadingByGpioAndI2CProcessorRequestVersionOne record)
         {
             var existingSensors = _sensorClient.GetSensors();
 
@@ -41,19 +42,23 @@ namespace HydroPiApi.Controllers.Sensors.Version1.Processors
             };
         }
 
-        public override IActionResult ProcessRequest(GetSensorReadingProcessorRequestVersionOne record)
+        public override IActionResult ProcessRequest(GetSensorReadingByGpioAndI2CProcessorRequestVersionOne record)
         {
-            var result = new GetSensorReadingProcessorResponseVersionOne
+            var result = new GetSensorReadingByGpioAndI2CProcessorResponseVersionOne
             {
                 Errors = new List<string> { $"Could not get reading from gpio pin: {record.GpioPin}" },
                 IsSuccess = false,
-                Reading = null, 
+                Reading = null,
                 StatusCode = System.Net.HttpStatusCode.NotFound
             };
 
-            var reading = _sensorClient.GetSensorReading(record.GpioPin);
-            
-            if(reading != null)
+            var reading = _sensorClient.GetSensorReading(new SensorReadingByGpioI2COptions()
+            {
+                GpioPin = record.GpioPin,
+                I2CPin = record.I2CPin
+            });
+
+            if (reading != null)
             {
                 result.Errors = null;
                 result.IsSuccess = true;

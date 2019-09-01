@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using SensorClient.Models;
 using SensorClient.Models.SensorReadings;
 using SensorClient.SensorReadings;
+using SensorClient.SensorReadings.Clients.Models;
 
 namespace SensorClient
 {
@@ -29,10 +30,10 @@ namespace SensorClient
             _sensors = sensorClientOptions.Sensors;
         }       
 
-        public ISensorReading GetSensorReading(int gpioPin)
+        public ISensorReading GetSensorReading(IClientOptions options)
         {
-            var currentSensor = GetSensorByGpio(gpioPin);
-            var client = _sensorReadingClientFactory.Create(currentSensor.GpioPin, currentSensor.Type);
+            var currentSensor = GetSensorByGpio(options.GpioPin);
+            var client = _sensorReadingClientFactory.Create(options, currentSensor.Type);
 
             return client.ReadSensor();
         }

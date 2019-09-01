@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using RelayClient;
 using SensorClient;
 using SensorClient.Models.SensorReadings;
+using SensorClient.SensorReadings.Clients.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,7 +37,7 @@ namespace HydroPiApi.BackgroundJobs
                 try
                 {
                     var humidityReading = (HumidityTemperatureReading)_sensorClient
-                        .GetSensorReading(_options.HumiditySensorGpio);
+                        .GetSensorReading(new SensorReadingByGpioOptions() {GpioPin = _options.HumiditySensorGpio });
 
                     var relayRequest = new ToggleRelayStateRequest
                     {

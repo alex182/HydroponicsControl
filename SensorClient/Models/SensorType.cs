@@ -6,6 +6,7 @@ namespace SensorClient.Models
 {
     public enum SensorType
     {
-        Humidity_Temperature
+        Humidity_Temperature,
+        Humidity_Temperature_Altitude_Pressure
     }
 }

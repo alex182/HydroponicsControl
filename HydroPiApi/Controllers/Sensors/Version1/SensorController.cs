@@ -38,9 +38,9 @@ namespace HydroPiApi.Controllers.Sensors.Version1
         }
 
         [HttpGet("reading")]
-        public IActionResult GetSensorReading([FromQuery][Required] int gpioPin)
+        public IActionResult GetSensorReadingByGpio([FromQuery][Required][Range(0,int.MaxValue)] int gpioPin)
         {
-            var request = new GetSensorReadingProcessorRequestVersionOne()
+            var request = new GetSensorReadingByGpioProcessorRequestVersionOne()
             {
                 GpioPin = gpioPin
             };
@@ -48,6 +48,22 @@ namespace HydroPiApi.Controllers.Sensors.Version1
 
             var result = processor.Execute();
             return result; 
+        }
+
+        [HttpGet("reading")]
+        public IActionResult GetSensorReadingByGpioAndI2C([FromQuery][Required][Range(0,int.MaxValue)] int gpiopin,
+            [FromQuery][Required][Range(0,int.MaxValue)] int i2cpin)
+        {
+            var request = new GetSensorReadingByGpioAndI2CProcessorRequestVersionOne()
+            {
+                GpioPin = gpiopin,
+                I2CPin = i2cpin
+            };
+
+            var processor = _processorFactory.Create(request);
+
+            var result = processor.Execute();
+            return result;
         }
     }
 }
