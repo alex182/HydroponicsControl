@@ -36,8 +36,8 @@ namespace HydroPiApi.BackgroundJobs
             {
                 try
                 {
-                    var humidityReading = (HumidityTemperatureReading)_sensorClient
-                        .GetSensorReading(new SensorReadingByGpioOptions() {GpioPin = _options.HumiditySensorGpio });
+                    //var humidityReading = (HumidityTemperatureReading)_sensorClient
+                    //    .GetSensorReading(new SensorReadingByGpioOptions() {GpioPin = _options.HumiditySensorGpio });
 
                     var relayRequest = new ToggleRelayStateRequest
                     {
@@ -45,7 +45,7 @@ namespace HydroPiApi.BackgroundJobs
                         State = RelayState.On
                     };
 
-                    if (humidityReading.Humidity >= _options.TargetHumidity)
+                    if (_relayClient.GetRelayState(_options.RelayGpio) == RelayState.On)
                     {
                         relayRequest.State = RelayState.Off;
                     }

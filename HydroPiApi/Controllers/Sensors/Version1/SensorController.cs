@@ -50,7 +50,7 @@ namespace HydroPiApi.Controllers.Sensors.Version1
             return result; 
         }
 
-        [HttpGet("reading")]
+        [HttpGet("readingByGpioAndI2C")]
         public IActionResult GetSensorReadingByGpioAndI2C([FromQuery][Required][Range(0,int.MaxValue)] int gpiopin,
             [FromQuery][Required][Range(0,int.MaxValue)] int i2cpin)
         {
