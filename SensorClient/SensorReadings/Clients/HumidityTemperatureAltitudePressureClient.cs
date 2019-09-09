@@ -19,7 +19,7 @@ namespace SensorClient.SensorReadings.Clients
             )
         {
             //Bme280.DefaultI2cAddress
-            var i2cSettings = new I2cConnectionSettings(options.I2CPin, Bme280.DefaultI2cAddress);
+            var i2cSettings = new I2cConnectionSettings(1, Bme280.DefaultI2cAddress);
             var i2cDevice = I2cDevice.Create(i2cSettings);
             _sensor = new Bme280(i2cDevice);
         }
