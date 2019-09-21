@@ -50,7 +50,10 @@ namespace HydroPiApi
             };
 
             var humidifierJobOptions = Configuration.GetSection("HumidifierJobOptions")
-                .Get<HumidifierJobOptions>();
+                .Get<HumidifierPressureAltitudeTemperatureJobOptions>();
+
+            var fanJobOptions = Configuration.GetSection("FanJobOptions")
+                .Get<FanJobOptions>();
 
             //TODO: use a real logger eventually
             var loggerFactory = new LoggerFactory();
@@ -66,7 +69,8 @@ namespace HydroPiApi
                 services.AddSingleton<IGpioController, GpioController>();
             }
 
-            services.AddSingleton<IHumidifierJobOptions>(provider => humidifierJobOptions);
+            services.AddSingleton<HumidifierPressureAltitudeTemperatureJobOptions>(provider => humidifierJobOptions);
+            services.AddSingleton<FanJobOptions>(provider => fanJobOptions);
             services.AddSingleton<IRelayClientOptions>(provider => relayOptions);
             services.AddSingleton<ISensorClientOptions>(provider => sensorOptions);
             services.AddTransient<ISensorReadingClientFactory, SensorReadingClientFactory>(); 
@@ -75,7 +79,9 @@ namespace HydroPiApi
            
             services.AddTransient<IProcessorFactory, ProcessorFactory>();
 
-            services.AddSingleton<IHostedService, HumidifierJob>();
+            services.AddSingleton<IHostedService, HumidifierPressureAltitudeTemperatureJob>();
+            services.AddSingleton<IHostedService, FanJob>();
+
 
             services.AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);

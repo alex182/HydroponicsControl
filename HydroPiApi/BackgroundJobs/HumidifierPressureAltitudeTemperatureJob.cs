@@ -7,6 +7,8 @@ using HydroPiApi.BackgroundJobs.Models;
 using Microsoft.Extensions.Logging;
 using RelayClient;
 using SensorClient;
+using SensorClient.Models.SensorReadings;
+using SensorClient.SensorReadings.Clients.Models;
 
 namespace HydroPiApi.BackgroundJobs
 {
@@ -29,8 +31,33 @@ namespace HydroPiApi.BackgroundJobs
         {
             while (!stoppingToken.IsCancellationRequested)
             {
-                
-                await Task.Delay(TimeSpan.FromMinutes(_options.CheckInterval), stoppingToken);
+
+                try
+                {
+                    var humidityReading = (HumidityTemperatureAltitudePressureReading)_sensorClient
+                        .GetSensorReading(new SensorReadingByGpioI2COptions() {GpioPin = _options.HumiditySensorGpio });
+
+                    var relayRequest = new ToggleRelayStateRequest
+                    {
+                        GpioPin = _options.RelayGpio,
+                        State = RelayState.Off
+                    };
+
+                    if (humidityReading.Humidity < _options.TargetHumidity)
+                    {
+                        relayRequest.State = RelayState.On;
+                    }
+
+                    _relayClient.ToggleRelayState(relayRequest);
+                }
+                catch (Exception ex)
+                {
+                   // need a logger eventually...
+                }
+                finally
+                {
+                    await Task.Delay(TimeSpan.FromMinutes(_options.CheckInterval), stoppingToken);
+                }
             }
         }
     }
