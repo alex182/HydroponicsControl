@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using HydroPiApi.BackgroundJobs.JobStateHelper;
 using HydroPiApi.BackgroundJobs.Models;
 using Microsoft.Extensions.Logging;
 using RelayClient;
@@ -56,6 +57,13 @@ namespace HydroPiApi.BackgroundJobs
                 }
                 finally
                 {
+                    var lastRun = DateTime.UtcNow;
+                    JobStateHelper.JobStateHelper.AddOrUpdateJobState(new JobState
+                    {
+                        LastRunTime = lastRun,
+                        NextRunTime = lastRun.AddMinutes(_options.CheckInterval)
+                    }, nameof(HumidifierPressureAltitudeTemperatureJob));
+
                     await Task.Delay(TimeSpan.FromMinutes(_options.CheckInterval), stoppingToken);
                 }
             }

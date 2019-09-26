@@ -2,11 +2,7 @@
 using HydroPiApi.Controllers.Sensors.Version1.Processors.Request;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace HydroPiApi.Controllers.Sensors.Version1
 {

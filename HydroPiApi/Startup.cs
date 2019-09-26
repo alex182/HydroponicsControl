@@ -94,10 +94,7 @@ namespace HydroPiApi
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-            }
-
-            var devMachineName = Configuration.GetValue<string>("DevMachineName");
-         
+            }         
 
             app.UseMvc();
         }
