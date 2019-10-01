@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using HydroPiApi.BackgroundJobs.JobStateHelper;
@@ -64,7 +62,8 @@ namespace HydroPiApi.BackgroundJobs
                     JobStateHelper.JobStateHelper.AddOrUpdateJobState(new JobState
                     {
                         LastRunTime = lastRun,
-                        NextRunTime = lastRun.AddMinutes(_options.CheckInterval)
+                        NextRunTime = lastRun.AddMinutes(_options.CheckInterval),
+                        JobOptions = _options
                     }, nameof(HumidifierPressureAltitudeTemperatureJob));
 
                     await Task.Delay(TimeSpan.FromMinutes(_options.CheckInterval), stoppingToken);

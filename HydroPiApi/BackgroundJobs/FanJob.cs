@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using HydroPiApi.BackgroundJobs.JobStateHelper;
@@ -8,7 +6,6 @@ using HydroPiApi.BackgroundJobs.Models;
 using Microsoft.Extensions.Logging;
 using RelayClient;
 using SensorClient;
-using HydroPiApi.BackgroundJobs.JobStateHelper;
 
 namespace HydroPiApi.BackgroundJobs
 {
@@ -56,7 +53,8 @@ namespace HydroPiApi.BackgroundJobs
                     JobStateHelper.JobStateHelper.AddOrUpdateJobState(new JobState
                     {
                         LastRunTime = lastRun,
-                        NextRunTime = lastRun.AddMinutes(_options.JobInterval)
+                        NextRunTime = lastRun.AddMinutes(_options.JobInterval),
+                        JobOptions = _options
                     }, nameof(FanJob));
 
                     await Task.Delay(TimeSpan.FromMinutes(_options.JobInterval), stoppingToken);

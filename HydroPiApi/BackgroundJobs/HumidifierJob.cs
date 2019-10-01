@@ -1,13 +1,8 @@
 ﻿using HydroPiApi.BackgroundJobs.Models;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using RelayClient;
 using SensorClient;
-using SensorClient.Models.SensorReadings;
-using SensorClient.SensorReadings.Clients.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
