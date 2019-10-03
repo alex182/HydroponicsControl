@@ -2,6 +2,8 @@
 using HydroPiApi.Controllers.Relay.Version1.Processors.Request;
 using HydroPiApi.Controllers.Sensors.Version1.Processors;
 using HydroPiApi.Controllers.Sensors.Version1.Processors.Request;
+using HydroPiApi.Controllers.Tasks.Version1.Processors;
+using HydroPiApi.Controllers.Tasks.Version1.Processors.Request;
 using Microsoft.Extensions.Logging;
 using RelayClient;
 using SensorClient;
@@ -54,6 +56,9 @@ namespace HydroPiApi.Controllers.Common.Processor
                 return new GetSensorReadingByGpioAndI2CProcessorVersionOne((GetSensorReadingByGpioAndI2CProcessorRequestVersionOne)request,
                     _loggerFactory, _sensorClient);
 
+            if (request is UpdateHumidifierTaskProcessorRequestVersionOne)
+                return new UpdateHumidifierTaskProcessorVersionOne((UpdateHumidifierTaskProcessorRequestVersionOne)request,
+                    _loggerFactory, _relayClient);
             
 
             return null;

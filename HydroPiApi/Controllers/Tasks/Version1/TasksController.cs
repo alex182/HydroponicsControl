@@ -1,7 +1,10 @@
 ﻿using HydroPiApi.BackgroundJobs.JobStateHelper;
 using HydroPiApi.Controllers.Common.Processor;
+using HydroPiApi.Controllers.Tasks.Version1.Models;
+using HydroPiApi.Controllers.Tasks.Version1.Processors.Request;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using RelayClient;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,6 +35,20 @@ namespace HydroPiApi.Controllers.Tasks.Version1
             return new OkObjectResult(JobStateHelper.GetJobs());
         }
 
-        [HttpGet("")]
+        [HttpPut("updateHumidifierTask")]
+        public IActionResult UpdateHumidifierTask(UpdateHumidifierTaskRequest request)
+        {
+            var processorRequest = new UpdateHumidifierTaskProcessorRequestVersionOne
+            {
+                CheckInterval = request.CheckInterval,
+                HumiditySensorGpio = request.HumiditySensorGpio,
+                TargetHumidity = request.TargetHumidity
+            };
+
+            var processor = _processorFactory.Create(processorRequest);
+            var result = processor.Execute();
+
+            return result; 
+        }
     }
 }
