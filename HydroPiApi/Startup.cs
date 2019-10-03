@@ -34,7 +34,7 @@ namespace HydroPiApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            var devMachineName = Configuration.GetValue<string>("DevMachineName");
+            var devMachineNames = Configuration.GetSection("DevMachineNames").Get<List<string>>();
 
             var relays = Configuration.GetSection("Relays").Get<List<Relay>>();
             var relayOptions = new RelayClientOptions
@@ -65,7 +65,7 @@ namespace HydroPiApi
 
             services.AddTransient(provider => loggerFactory);
 
-            if (Environment.MachineName == devMachineName)
+            if (devMachineNames.Contains(Environment.MachineName))
             {
                 services.AddSingleton<IGpioController, MockGpioDriver>();
             }
