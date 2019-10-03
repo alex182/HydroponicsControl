@@ -56,6 +56,9 @@ namespace HydroPiApi.Controllers.Common.Processor
                 return new GetSensorReadingByGpioAndI2CProcessorVersionOne((GetSensorReadingByGpioAndI2CProcessorRequestVersionOne)request,
                     _loggerFactory, _sensorClient);
 
+            if (request is GetTaskByNameProcessorRequestVersionOne)
+                return new GetTaskByNameProcessor(
+                    (GetTaskByNameProcessorRequestVersionOne)request, _loggerFactory);
             if (request is UpdateHumidifierTaskProcessorRequestVersionOne)
                 return new UpdateHumidifierTaskProcessorVersionOne((UpdateHumidifierTaskProcessorRequestVersionOne)request,
                     _loggerFactory, _relayClient);

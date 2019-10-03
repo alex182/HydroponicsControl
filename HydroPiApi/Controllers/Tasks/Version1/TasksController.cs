@@ -29,7 +29,7 @@ namespace HydroPiApi.Controllers.Tasks.Version1
             _processorFactory = processorFactory;
         }
 
-        [HttpGet]
+        [HttpGet()]
         public IActionResult GetAllTasks()
         {
             return new OkObjectResult(JobStateHelper.GetJobs());
@@ -49,6 +49,17 @@ namespace HydroPiApi.Controllers.Tasks.Version1
             var result = processor.Execute();
 
             return result; 
+        }
+        [HttpGet("ByName")]
+        public IActionResult GetTaskByName([FromQuery][Required]string taskName)
+        {
+            var request = new GetTaskByNameProcessorRequestVersionOne()
+            {
+                TaskName = taskName
+            };
+
+            var processor = _processorFactory.Create(request);
+            return processor.Execute(); 
         }
     }
 }

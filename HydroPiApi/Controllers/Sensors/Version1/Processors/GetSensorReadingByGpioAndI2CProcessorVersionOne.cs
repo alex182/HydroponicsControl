@@ -5,10 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using SensorClient;
 using SensorClient.SensorReadings.Clients.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace HydroPiApi.Controllers.Sensors.Version1.Processors
 {

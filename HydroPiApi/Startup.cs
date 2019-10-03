@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Device.Gpio;
-using System.Linq;
-using System.Threading.Tasks;
 using HydroPiApi.BackgroundJobs;
+using HydroPiApi.BackgroundJobs.JobStateHelper;
 using HydroPiApi.BackgroundJobs.Models;
 using HydroPiApi.Controllers.Common;
 using HydroPiApi.Controllers.Common.Processor;
@@ -54,6 +53,12 @@ namespace HydroPiApi
 
             var fanJobOptions = Configuration.GetSection("FanJobOptions")
                 .Get<FanJobOptions>();
+
+            JobStateHelper.AddOrUpdateJobState(new JobState() { JobOptions = humidifierJobOptions}, 
+                "HumidifierPressureAltitudeTemperatureJob");
+
+            JobStateHelper.AddOrUpdateJobState(new JobState() { JobOptions = fanJobOptions },
+                "FanJob");
 
             //TODO: use a real logger eventually
             var loggerFactory = new LoggerFactory();

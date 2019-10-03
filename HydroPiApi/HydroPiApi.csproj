@@ -29,6 +29,7 @@
 
   <ItemGroup>
     <Folder Include="Controllers\Sensors\Version1\Models\" />
+    <Folder Include="Controllers\Tasks\Version1\Models\" />
     <Folder Include="Postman Collection\" />
   </ItemGroup>
 

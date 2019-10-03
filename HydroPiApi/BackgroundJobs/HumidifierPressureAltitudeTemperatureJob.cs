@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using HydroPiApi.BackgroundJobs.JobStateHelper;
@@ -25,7 +23,10 @@ namespace HydroPiApi.BackgroundJobs
             HumidifierPressureAltitudeTemperatureJobOptions options) : base(relayClient, sensorClient)
         {
             _logger = loggerFactory.CreateLogger<HumidifierPressureAltitudeTemperatureJob>();
-            _options = options; 
+
+            _options = (HumidifierPressureAltitudeTemperatureJobOptions)
+                JobStateHelper.JobStateHelper
+                .GetJobByName("HumidifierPressureAltitudeTemperatureJob").JobOptions; 
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -61,7 +62,8 @@ namespace HydroPiApi.BackgroundJobs
                     JobStateHelper.JobStateHelper.AddOrUpdateJobState(new JobState
                     {
                         LastRunTime = lastRun,
-                        NextRunTime = lastRun.AddMinutes(_options.CheckInterval)
+                        NextRunTime = lastRun.AddMinutes(_options.CheckInterval),
+                        JobOptions = _options
                     }, nameof(HumidifierPressureAltitudeTemperatureJob));
 
                     await Task.Delay(TimeSpan.FromMinutes(_options.CheckInterval), stoppingToken);

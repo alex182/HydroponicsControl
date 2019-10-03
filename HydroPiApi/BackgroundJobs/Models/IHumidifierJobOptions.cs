@@ -1,6 +1,6 @@
 ﻿namespace HydroPiApi.BackgroundJobs.Models
 {
-    public interface IHumidifierJobOptions
+    public interface IHumidifierJobOptions : IJobOptions
     {
         int CheckInterval { get; set; }
         int HumiditySensorGpio { get; set; }

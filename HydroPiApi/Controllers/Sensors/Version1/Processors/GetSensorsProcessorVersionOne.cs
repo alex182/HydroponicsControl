@@ -4,10 +4,8 @@ using HydroPiApi.Controllers.Sensors.Version1.Processors.Response;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using SensorClient;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace HydroPiApi.Controllers.Sensors.Version1.Processors
 {

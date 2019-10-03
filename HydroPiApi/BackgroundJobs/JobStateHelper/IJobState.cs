@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HydroPiApi.BackgroundJobs.Models;
+using System;
 
 namespace HydroPiApi.BackgroundJobs.JobStateHelper
 {
@@ -6,5 +7,6 @@ namespace HydroPiApi.BackgroundJobs.JobStateHelper
     {
         DateTimeOffset LastRunTime { get; set; }
         DateTimeOffset NextRunTime { get; set; }
+        IJobOptions JobOptions { get; set; }
     }
 }
