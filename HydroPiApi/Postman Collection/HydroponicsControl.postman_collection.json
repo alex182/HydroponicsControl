@@ -212,6 +212,36 @@
 								"description": ""
 							},
 							"response": []
+						},
+						{
+							"name": "ByName",
+							"request": {
+								"url": {
+									"raw": "{{url}}/api/task/ByName?taskName=FanJob",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api",
+										"task",
+										"ByName"
+									],
+									"query": [
+										{
+											"key": "taskName",
+											"value": "FanJob",
+											"equals": true,
+											"description": ""
+										}
+									],
+									"variable": []
+								},
+								"method": "GET",
+								"header": [],
+								"body": {},
+								"description": ""
+							},
+							"response": []
 						}
 					],
 					"_postman_isSubFolder": true
