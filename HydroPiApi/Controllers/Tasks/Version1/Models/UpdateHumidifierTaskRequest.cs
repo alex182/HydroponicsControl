@@ -16,5 +16,11 @@ namespace HydroPiApi.Controllers.Tasks.Version1.Models
 
         [Range(0, int.MaxValue)]
         public int? TargetHumidity { get; set; }
+
+        [Range(0, int.MaxValue)]
+        public int? RelayGpio { get; set; }
+
+        [Required]
+        public string JobName { get; set; }
     }
 }

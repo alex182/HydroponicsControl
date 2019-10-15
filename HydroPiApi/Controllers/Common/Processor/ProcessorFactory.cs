@@ -59,9 +59,10 @@ namespace HydroPiApi.Controllers.Common.Processor
             if (request is GetTaskByNameProcessorRequestVersionOne)
                 return new GetTaskByNameProcessor(
                     (GetTaskByNameProcessorRequestVersionOne)request, _loggerFactory);
+
             if (request is UpdateHumidifierTaskProcessorRequestVersionOne)
                 return new UpdateHumidifierTaskProcessorVersionOne((UpdateHumidifierTaskProcessorRequestVersionOne)request,
-                    _loggerFactory, _relayClient);
+                    _loggerFactory, _relayClient, _sensorClient);
             
 
             return null;

@@ -1,21 +1,23 @@
 {
+	"variables": [],
 	"info": {
-		"_postman_id": "253dc3df-8b9c-4bb7-a801-38595ae0d8e7",
 		"name": "HydroponicsControl",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"_postman_id": "27cdd2bc-25e3-bb0e-8ed4-5a92058c9507",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
 	},
 	"item": [
 		{
 			"name": "Relay",
+			"description": "",
 			"item": [
 				{
 					"name": "Version 1",
+					"description": "",
 					"item": [
 						{
 							"name": "GetRelayState",
 							"request": {
-								"method": "GET",
-								"header": [],
 								"url": {
 									"raw": "{{url}}/api/relay/state?GpioPin=4",
 									"host": [
@@ -31,32 +33,37 @@
 											"key": "GpioPin",
 											"value": "4"
 										}
-									]
-								}
+									],
+									"variable": []
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"description": ""
 							},
 							"response": []
 						},
 						{
 							"name": "GetRelays",
 							"request": {
+								"url": "{{url}}/api/relay",
 								"method": "GET",
 								"header": [],
-								"url": {
-									"raw": "{{url}}/api/relay",
-									"host": [
-										"{{url}}"
-									],
-									"path": [
-										"api",
-										"relay"
-									]
-								}
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"description": ""
 							},
 							"response": []
 						},
 						{
 							"name": "ToggleRelayState",
 							"request": {
+								"url": "{{url}}/api/relay/toggleState",
 								"method": "POST",
 								"header": [
 									{
@@ -70,17 +77,7 @@
 									"mode": "raw",
 									"raw": "{\n\t\"GpioPin\":27,\n\t\"RelayState\":1\n}"
 								},
-								"url": {
-									"raw": "{{url}}/api/relay/toggleState",
-									"host": [
-										"{{url}}"
-									],
-									"path": [
-										"api",
-										"relay",
-										"toggleState"
-									]
-								}
+								"description": ""
 							},
 							"response": []
 						}
@@ -91,33 +88,29 @@
 		},
 		{
 			"name": "Sensors",
+			"description": "",
 			"item": [
 				{
 					"name": "Version 1",
+					"description": "",
 					"item": [
 						{
 							"name": "GetSensors",
 							"request": {
+								"url": "{{url}}/api/sensor",
 								"method": "GET",
 								"header": [],
-								"url": {
-									"raw": "{{url}}/api/sensor",
-									"host": [
-										"{{url}}"
-									],
-									"path": [
-										"api",
-										"sensor"
-									]
-								}
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"description": ""
 							},
 							"response": []
 						},
 						{
 							"name": "GetSensorReading",
 							"request": {
-								"method": "GET",
-								"header": [],
 								"url": {
 									"raw": "{{url}}/api/sensor/reading?GpioPin=23",
 									"host": [
@@ -133,32 +126,81 @@
 											"key": "GpioPin",
 											"value": "23"
 										}
-									]
-								}
+									],
+									"variable": []
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"description": ""
+							},
+							"response": []
+						},
+						{
+							"name": "readingByGpioAndI2C",
+							"request": {
+								"url": {
+									"raw": "{{url}}/api/sensor/readingByGpioAndI2C?GpioPin=23",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api",
+										"sensor",
+										"readingByGpioAndI2C"
+									],
+									"query": [
+										{
+											"key": "GpioPin",
+											"value": "23",
+											"equals": true,
+											"description": ""
+										}
+									],
+									"variable": []
+								},
+								"method": "GET",
+								"header": [],
+								"body": {},
+								"description": ""
 							},
 							"response": []
 						}
 					],
-					"event": [
+					"_postman_isSubFolder": true
+				}
+			]
+		},
+		{
+			"name": "Tasks",
+			"description": "",
+			"item": [
+				{
+					"name": "Version 1",
+					"description": "",
+					"item": [
 						{
-							"listen": "prerequest",
-							"script": {
-								"id": "4006731e-aae2-4dde-92b1-56424b83ccc5",
-								"type": "text/javascript",
-								"exec": [
-									""
-								]
-							}
-						},
-						{
-							"listen": "test",
-							"script": {
-								"id": "f71b9b96-cf03-4d58-90be-1c2b94f7d005",
-								"type": "text/javascript",
-								"exec": [
-									""
-								]
-							}
+							"name": "UpdateHumidifierTask",
+							"request": {
+								"url": "{{url}}/api/task/updateHumidifierTask",
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"description": ""
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"TargetHumidity\" : 95,\n\t\"JobName\": \"HumidifierPressureAltitudeTemperatureJob\",\n\t\"CheckInterval\": 1,\n\t\"RelayGpio\": 22,\n\t\"HumiditySensorGpio\": 4\n}"
+								},
+								"description": ""
+							},
+							"response": []
 						}
 					],
 					"_postman_isSubFolder": true

@@ -41,9 +41,11 @@ namespace HydroPiApi.Controllers.Tasks.Version1
         {
             var processorRequest = new UpdateHumidifierTaskProcessorRequestVersionOne
             {
-                CheckInterval = request.CheckInterval,
-                HumiditySensorGpio = request.HumiditySensorGpio,
-                TargetHumidity = request.TargetHumidity
+                CheckInterval = request?.CheckInterval,
+                HumiditySensorGpio = request?.HumiditySensorGpio,
+                TargetHumidity = request?.TargetHumidity,
+                RelayGpio = request?.RelayGpio,
+                JobName = request.JobName
             };
 
             var processor = _processorFactory.Create(processorRequest);
@@ -51,6 +53,7 @@ namespace HydroPiApi.Controllers.Tasks.Version1
 
             return result; 
         }
+
         [HttpGet("ByName")]
         public IActionResult GetTaskByName([FromQuery][Required]string taskName)
         {

@@ -23,16 +23,17 @@ namespace HydroPiApi.BackgroundJobs
             HumidifierPressureAltitudeTemperatureJobOptions options) : base(relayClient, sensorClient)
         {
             _logger = loggerFactory.CreateLogger<HumidifierPressureAltitudeTemperatureJob>();
-
-            _options = (HumidifierPressureAltitudeTemperatureJobOptions)
-                JobStateHelper.JobStateHelper
-                .GetJobByName("HumidifierPressureAltitudeTemperatureJob").JobOptions; 
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
+
+
             while (!stoppingToken.IsCancellationRequested)
             {
+                _options = (HumidifierPressureAltitudeTemperatureJobOptions)
+                JobStateHelper.JobStateHelper
+                .GetJobByName("HumidifierPressureAltitudeTemperatureJob").JobOptions;
 
                 try
                 {

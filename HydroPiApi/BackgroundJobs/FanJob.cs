@@ -19,13 +19,14 @@ namespace HydroPiApi.BackgroundJobs
             ILoggerFactory loggerFactory) : base(relayClient, sensorClient)
         {
             _logger = loggerFactory.CreateLogger<FanJob>();
-            _options = (FanJobOptions)JobStateHelper.JobStateHelper.GetJobByName("FanJob").JobOptions;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
+
             while (!stoppingToken.IsCancellationRequested)
             {
+                _options = (FanJobOptions)JobStateHelper.JobStateHelper.GetJobByName("FanJob").JobOptions;
 
                 try
                 {

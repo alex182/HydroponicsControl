@@ -1,9 +1,11 @@
 ﻿using HydroPiApi.BackgroundJobs.JobStateHelper;
+using HydroPiApi.BackgroundJobs.Models;
 using HydroPiApi.Controllers.Common.Processor;
 using HydroPiApi.Controllers.Tasks.Version1.Processors.Request;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using RelayClient;
+using SensorClient;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,21 +18,34 @@ namespace HydroPiApi.Controllers.Tasks.Version1.Processors
 
         private readonly ILogger _logger;
         private readonly IRelayClient _relayClient;
+        private readonly ISensorClient _sensorClient; 
 
         public UpdateHumidifierTaskProcessorVersionOne(UpdateHumidifierTaskProcessorRequestVersionOne record,
             ILoggerFactory loggerFactory,
-            IRelayClient relayClient) : base(record, loggerFactory)
+            IRelayClient relayClient,
+            ISensorClient sensorClient) : base(record, loggerFactory)
         {
             _logger = loggerFactory.CreateLogger<UpdateHumidifierTaskProcessorVersionOne>();
             _relayClient = relayClient;
+            _sensorClient = sensorClient;
         }
 
         public override IValidationResult IsValid(UpdateHumidifierTaskProcessorRequestVersionOne record)
         {
             var existingRelays = _relayClient.GetRelays();
+            var existingSensors = _sensorClient.GetSensors(); 
             var jobExists = JobStateHelper.GetJobByName(record.JobName) != null;
 
-            if (!existingRelays.Any(r => r.GpioPin == record.HumiditySensorGpio))
+            if (record?.RelayGpio != null && !existingRelays.Any(r => r.GpioPin == record.RelayGpio))
+            {
+                return new ValidationResult
+                {
+                    Message = $"Could not find a relay with the gpio pin: {record.RelayGpio}",
+                    StatusCode = System.Net.HttpStatusCode.NotFound
+                };
+            }
+
+            if (record?.HumiditySensorGpio != null && !existingSensors.Any(r => r.GpioPin == record.HumiditySensorGpio))
             {
                 return new ValidationResult
                 {
@@ -39,7 +54,7 @@ namespace HydroPiApi.Controllers.Tasks.Version1.Processors
                 };
             }
 
-            if(jobExists)
+            if (!jobExists)
             {
                 return new ValidationResult
                 {
@@ -53,12 +68,24 @@ namespace HydroPiApi.Controllers.Tasks.Version1.Processors
 
         public override IActionResult ProcessRequest(UpdateHumidifierTaskProcessorRequestVersionOne record)
         {
-            //var jobToUpdate = JobStateHelper.GetJobByName(record.JobName);
-            //var newJobState = new JobState() { }
+            var jobToUpdate = JobStateHelper.GetJobByName(record.JobName);
+            var currentJobOptions = (HumidifierPressureAltitudeTemperatureJobOptions)jobToUpdate.JobOptions;
 
-            //JobStateHelper.AddOrUpdateJobState()
+            var newJobState = new JobState()
+            { JobOptions = new HumidifierPressureAltitudeTemperatureJobOptions
+                {
+                    CheckInterval = record?.CheckInterval ?? currentJobOptions.CheckInterval,
+                    HumiditySensorGpio = record?.HumiditySensorGpio ?? currentJobOptions.HumiditySensorGpio,
+                    TargetHumidity = record?.TargetHumidity ?? currentJobOptions.TargetHumidity,
+                    RelayGpio = record?.RelayGpio ?? currentJobOptions.RelayGpio
+                },
+                LastRunTime = jobToUpdate.LastRunTime,
+                NextRunTime = jobToUpdate.NextRunTime
+            };
 
-            throw new NotImplementedException(); 
+            JobStateHelper.AddOrUpdateJobState(newJobState, record.JobName);
+
+            return new OkObjectResult(newJobState); 
         }
     }
 }
