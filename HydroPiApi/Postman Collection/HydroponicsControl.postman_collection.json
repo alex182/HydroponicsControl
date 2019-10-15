@@ -201,6 +201,17 @@
 								"description": ""
 							},
 							"response": []
+						},
+						{
+							"name": "GetAllTasks",
+							"request": {
+								"url": "{{url}}/api/task",
+								"method": "GET",
+								"header": [],
+								"body": {},
+								"description": ""
+							},
+							"response": []
 						}
 					],
 					"_postman_isSubFolder": true
