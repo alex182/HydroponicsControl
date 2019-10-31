@@ -1,3 +1,3 @@
 # HydroponicsControl
 
-small website/api to control a relay connected to a raspberry pi
+API used to control fans, a humdifier, and a heater in my gourmet mushroom grow tent
