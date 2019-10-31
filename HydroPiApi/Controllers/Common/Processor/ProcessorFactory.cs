@@ -63,7 +63,11 @@ namespace HydroPiApi.Controllers.Common.Processor
             if (request is UpdateHumidifierTaskProcessorRequestVersionOne)
                 return new UpdateHumidifierTaskProcessorVersionOne((UpdateHumidifierTaskProcessorRequestVersionOne)request,
                     _loggerFactory, _relayClient, _sensorClient);
-            
+
+            if (request is UpdateFanTaskProcessorRequestVersionOne)
+                return new UpdateFanTaskProcessorVersionOne((UpdateFanTaskProcessorRequestVersionOne)request,
+                    _loggerFactory, _relayClient);
+
 
             return null;
         }

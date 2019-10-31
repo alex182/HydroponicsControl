@@ -203,6 +203,26 @@
 							"response": []
 						},
 						{
+							"name": "UpdateFanTask",
+							"request": {
+								"url": "{{url}}/api/task/updateFanTask",
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"description": ""
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"RelayGpio\" : 23,\n\t\"JobName\": \"fanjob\",\n\t\"JobInterval\": 1,\n\t\"RunDuration\": 2\n}"
+								},
+								"description": ""
+							},
+							"response": []
+						},
+						{
 							"name": "GetAllTasks",
 							"request": {
 								"url": "{{url}}/api/task",
