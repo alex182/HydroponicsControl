@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using HydroPiApi.BackgroundJobs.JobStateHelper;
 using HydroPiApi.BackgroundJobs.Models;
 using Microsoft.Extensions.Logging;
 using RelayClient;
@@ -24,13 +23,17 @@ namespace HydroPiApi.BackgroundJobs
             HumidifierPressureAltitudeTemperatureJobOptions options) : base(relayClient, sensorClient)
         {
             _logger = loggerFactory.CreateLogger<HumidifierPressureAltitudeTemperatureJob>();
-            _options = options; 
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
+
+
             while (!stoppingToken.IsCancellationRequested)
             {
+                _options = (HumidifierPressureAltitudeTemperatureJobOptions)
+                JobStateHelper.JobStateHelper
+                .GetJobByName("HumidifierPressureAltitudeTemperatureJob").JobOptions;
 
                 try
                 {
@@ -56,6 +59,14 @@ namespace HydroPiApi.BackgroundJobs
                 }
                 finally
                 {
+                    var lastRun = DateTime.UtcNow;
+                    JobStateHelper.JobStateHelper.AddOrUpdateJobState(new JobState
+                    {
+                        LastRunTime = lastRun,
+                        NextRunTime = lastRun.AddMinutes(_options.CheckInterval),
+                        JobOptions = _options
+                    }, nameof(HumidifierPressureAltitudeTemperatureJob));
+
                     await Task.Delay(TimeSpan.FromMinutes(_options.CheckInterval), stoppingToken);
                 }
             }

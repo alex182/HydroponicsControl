@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 namespace HydroPiApi.BackgroundJobs.Models
 {
-    public interface IFanJobOptions
+    public interface IFanJobOptions : IJobOptions
     {
-        int JobInterval { get; set; }
+        int RunInterval { get; set; }
         int RunDuration { get; set; }
         int RelayGpioPin { get; set; }
     }

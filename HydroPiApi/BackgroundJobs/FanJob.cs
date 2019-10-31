@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using HydroPiApi.BackgroundJobs.JobStateHelper;
 using HydroPiApi.BackgroundJobs.Models;
 using Microsoft.Extensions.Logging;
 using RelayClient;
@@ -17,17 +16,17 @@ namespace HydroPiApi.BackgroundJobs
 
         public FanJob(IRelayClient relayClient, 
             ISensorClient sensorClient,
-            ILoggerFactory loggerFactory,
-            FanJobOptions options) : base(relayClient, sensorClient)
+            ILoggerFactory loggerFactory) : base(relayClient, sensorClient)
         {
             _logger = loggerFactory.CreateLogger<FanJob>();
-            _options = options;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
+
             while (!stoppingToken.IsCancellationRequested)
             {
+                _options = (FanJobOptions)JobStateHelper.JobStateHelper.GetJobByName("FanJob").JobOptions;
 
                 try
                 {
@@ -51,7 +50,15 @@ namespace HydroPiApi.BackgroundJobs
                 }
                 finally
                 {
-                    await Task.Delay(TimeSpan.FromMinutes(_options.JobInterval), stoppingToken);
+                    var lastRun = DateTime.UtcNow;
+                    JobStateHelper.JobStateHelper.AddOrUpdateJobState(new JobState
+                    {
+                        LastRunTime = lastRun,
+                        NextRunTime = lastRun.AddMinutes(_options.RunInterval),
+                        JobOptions = _options
+                    }, nameof(FanJob));
+
+                    await Task.Delay(TimeSpan.FromMinutes(_options.RunInterval), stoppingToken);
                 }
             }
         }

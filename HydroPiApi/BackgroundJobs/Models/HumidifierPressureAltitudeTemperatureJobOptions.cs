@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace HydroPiApi.BackgroundJobs.Models
 {
-    public class HumidifierPressureAltitudeTemperatureJobOptions : IHumidifierJobOptions
+    public class HumidifierPressureAltitudeTemperatureJobOptions : IHumidifierPressureAltitudeTemperatureJobOptions
     {
         public int CheckInterval { get; set; }
         public int HumiditySensorGpio { get; set; }

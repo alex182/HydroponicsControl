@@ -3,9 +3,6 @@ using HydroPiApi.Controllers.Relay.Version1.Models;
 using HydroPiApi.Controllers.Relay.Version1.Processors.Request;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using RelayClient;
-using System;
-using System.ComponentModel.DataAnnotations;
 using ToggleRelayStateRequest = HydroPiApi.Controllers.Relay.Version1.Models.ToggleRelayStateRequest;
 
 namespace HydroPiApi.Controllers.Relay.Version1

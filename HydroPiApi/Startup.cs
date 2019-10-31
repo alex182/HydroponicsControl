@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Device.Gpio;
-using System.Linq;
-using System.Threading.Tasks;
 using HydroPiApi.BackgroundJobs;
+using HydroPiApi.BackgroundJobs.JobStateHelper;
 using HydroPiApi.BackgroundJobs.Models;
 using HydroPiApi.Controllers.Common;
 using HydroPiApi.Controllers.Common.Processor;
@@ -35,7 +34,7 @@ namespace HydroPiApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            var devMachineName = Configuration.GetValue<string>("DevMachineName");
+            var devMachineNames = Configuration.GetSection("DevMachineNames").Get<List<string>>();
 
             var relays = Configuration.GetSection("Relays").Get<List<Relay>>();
             var relayOptions = new RelayClientOptions
@@ -55,12 +54,18 @@ namespace HydroPiApi
             var fanJobOptions = Configuration.GetSection("FanJobOptions")
                 .Get<FanJobOptions>();
 
+            JobStateHelper.AddOrUpdateJobState(new JobState() { JobOptions = humidifierJobOptions}, 
+                "HumidifierPressureAltitudeTemperatureJob");
+
+            JobStateHelper.AddOrUpdateJobState(new JobState() { JobOptions = fanJobOptions },
+                "FanJob");
+
             //TODO: use a real logger eventually
             var loggerFactory = new LoggerFactory();
 
             services.AddTransient(provider => loggerFactory);
 
-            if (Environment.MachineName == devMachineName)
+            if (devMachineNames.Contains(Environment.MachineName))
             {
                 services.AddSingleton<IGpioController, MockGpioDriver>();
             }
@@ -94,10 +99,7 @@ namespace HydroPiApi
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-            }
-
-            var devMachineName = Configuration.GetValue<string>("DevMachineName");
-         
+            }         
 
             app.UseMvc();
         }
