@@ -54,11 +54,11 @@ namespace HydroPiApi.BackgroundJobs
                     JobStateHelper.JobStateHelper.AddOrUpdateJobState(new JobState
                     {
                         LastRunTime = lastRun,
-                        NextRunTime = lastRun.AddMinutes(_options.JobInterval),
+                        NextRunTime = lastRun.AddMinutes(_options.RunInterval),
                         JobOptions = _options
                     }, nameof(FanJob));
 
-                    await Task.Delay(TimeSpan.FromMinutes(_options.JobInterval), stoppingToken);
+                    await Task.Delay(TimeSpan.FromMinutes(_options.RunInterval), stoppingToken);
                 }
             }
         }

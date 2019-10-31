@@ -54,6 +54,23 @@ namespace HydroPiApi.Controllers.Tasks.Version1
             return result; 
         }
 
+        [HttpPut("updateFanTask")]
+        public IActionResult UpdateFanTask(UpdateFanTaskRequest request)
+        {
+            var processorRequest = new UpdateFanTaskProcessorRequestVersionOne
+            {
+                RelayGpioPin = request.RelayGpio,
+                RunInterval = request.JobInterval,
+                RunDuration = request.RunDuration,
+                JobName = request.JobName
+            };
+
+            var processor = _processorFactory.Create(processorRequest);
+            var result = processor.Execute();
+
+            return result; 
+        }
+
         [HttpGet("ByName")]
         public IActionResult GetTaskByName([FromQuery][Required]string taskName)
         {
